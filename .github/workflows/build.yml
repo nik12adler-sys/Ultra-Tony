@@ -5,16 +5,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: unzip -q UltraTony.zip
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.7
-      - run: unzip -q UltraTonyLauncher.zip -d proj
-      - run: gradle -p proj assembleDebug
+          gradle-version: "8.9"
+          build-root-directory: UltraTony
+      - run: gradle assembleRelease --no-daemon
+        working-directory: UltraTony
       - uses: actions/upload-artifact@v4
         with:
-          name: UltraTony-apk
-          path: proj/app/build/outputs/apk/debug/*.apk
+          name: UltraTony-APK
+          path: UltraTony/app/build/outputs/apk/release/app-release.apk
